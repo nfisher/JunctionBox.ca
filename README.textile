@@ -1,0 +1,3 @@
+h2. JunctionBox.ca Static Content
+
+This is just the static website for "JunctionBox.ca":http://junctionbox.ca/.  Nothing much to see here that you can't see from the site.  It's currently being generated using Webby.  I may also look at Frank in the future, nanoc feels too heavy for my liking.
