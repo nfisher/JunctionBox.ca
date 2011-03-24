@@ -1,0 +1,16 @@
+---
+title:      Nathan Fisher
+created_at: 2011-03-24 23:13:57.345479 +00:00
+filter:
+  - erb
+  - textile
+---
+p(title). <%= h(@page.title) %>
+
+h3. Hours of Availability
+
+Currently unavailable for contract or consulting.
+
+<script type="text/javascript" src="http://www.linkedin.com/js/public-profile/widget-os.js"></script>
+<a class="linkedin-profileinsider-inline" href="http://uk.linkedin.com/in/nrfisher">Nathan Fisher</a>
+

@@ -1,0 +1,202 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+   <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+   <title>Simplified TDD with Sinatra autotest</title>
+   <meta name="author" content="" />
+
+   <!--- Blueprint CSS Framework -->
+   <link rel="stylesheet" href="/css/blueprint/screen.css" type="text/css" media="screen, projection">
+   <link rel="stylesheet" href="/css/blueprint/print.css" type="text/css" media="print">
+   <!--[if IE]>
+      <link rel="stylesheet" href="/css/blueprint/ie.css" type="text/css" media="screen, projection">
+   <![endif]-->
+
+   <!-- CodeRay syntax highlighting CSS -->
+   <link rel="stylesheet" href="/css/coderay.css" type="text/css" />
+
+   <!-- Homepage CSS -->
+   <link rel="stylesheet" href="/css/site.css" type="text/css" media="screen, projection" />
+</head>
+<body>
+
+<div class="container">
+
+   <div class="column span-20 prepend-2 append-2 first last" id="header">
+     <p class="title"><a href="/">JunctionBox.ca</a></p>
+     <p><a href="/articles/">Articles</a> | <a href="/resources/">Resources</a> | <a href="/nathan-fisher.html">Contact</a></p>
+     <hr/>
+   </div>
+
+   <div class="column span-15 prepend-2 first">
+      <p>General overview of what we&#8217;re building;</p>
+<ul>
+	<li>Simple autotest compatible directory structure.</li>
+	<li>Sinatra application.</li>
+	<li>Sinatra unit test.</li>
+</ul>
+<p>File setup:</p>
+<pre>
+
+export project=MyApp
+mkdir -p $project/{lib,test}
+cd $project
+cat &lt;&lt;EOT &gt; test/test_app.rb
+$:.unshift File.join(File.dirname(__FILE__),'..','lib')
+
+require 'app'
+require 'test/unit'
+
+class AppTest &lt; Test::Unit::TestCase
+  def test_fail
+    flunk 'Write your App tests!'
+  end
+end
+EOT
+
+autotest
+
+</pre>
+<p>This should output something akin to the following, if you don&#8217;t get that then somethings amiss that you&#8217;ll need to investigate further.</p>
+<pre>/Library/Ruby/Site/1.8/rubygems/custom_require.rb:31:in `gem_original_require': no such file to load -- app (LoadError)
+	from /Library/Ruby/Site/1.8/rubygems/custom_require.rb:31:in `require'
+	from ./test/test_app.rb:4
+	from /Library/Ruby/Site/1.8/rubygems/custom_require.rb:31:in `gem_original_require'
+	from /Library/Ruby/Site/1.8/rubygems/custom_require.rb:31:in `require'
+	from -e:2
+	from -e:2:in `each'
+	from -e:2</pre>
+<p>Next create a new file named &#8216;lib/app.rb&#8217;.</p>
+<p><code>touch lib/app.rb</code></p>
+<p>Once saved your test should kick to life with one failure:</p>
+<pre>
+
+1) Failure:
+test_fail(AppTest) [./test/test_app.rb:8]:
+Write your App tests!.
+
+</pre><p>\nHugely simplified test suite, but it gets you going and doesn&#8217;t contain reams of mystical cruft to debug.</p>
+<p>Next up is introducing rack&#8217;s test suite, modify your test_app.rb to look like the following;</p>
+<pre>
+
+$:.unshift File.join(File.dirname(__FILE__),'..','lib')
+
+require 'app'
+require 'test/unit'
+require 'rack/test'
+
+set :environment, :test
+
+class AppTest &lt; Test::Unit::TestCase
+  include Rack::Test::Methods
+
+  def app
+    App
+  end
+  
+  def test_fail
+    flunk 'Write your App tests!'
+  end
+end
+
+</pre>
+<p>Back to a test that doesn&#8217;t run? Good!</p>
+<p>Let&#8217;s get it back to a running test with the following change to &#8216;lib/app.rb&#8217;:</p>
+<pre>
+%w{rubygems sinatra}.each {|l| require l }
+</pre>
+<p>Now you should have a failing test.  Lets start on something meaningful remove the test_fail method and add the following:</p>
+<pre>
+
+def test_root_is_accessible
+  get '/'
+  assert last_response.ok?
+end
+
+</pre>
+<p>Your autotest should switch to the error output below:</p>
+<pre>
+
+1) Error:
+test_root_is_accessible(AppTest):
+NameError: uninitialized constant AppTest::App
+./test/test_app.rb:13:in `app'
+
+</pre>
+<p>That&#8217;s an indicator we&#8217;re missing our application class.  Dealing with one problem at a time lets implement the skeleton class in &#8216;lib/app.rb&#8217; as outlined below.</p>
+<pre>
+class App &lt; Sinatra::Base
+end
+</pre>
+<p>You should get a failing test case with the output below, which indicates the route is not found.</p>
+<pre>
+1) Failure:
+test_root_is_accessible(AppTest) [./test/test_app.rb:18]:
+&lt;false&gt; is not true.
+</pre>
+<p>Next up lets add the route in &#8216;lib/app.rb&#8217;.</p>
+<pre>
+
+get '/' do
+end
+
+</pre>
+<p>And there we go our first of hopefully many tests is now passing, congratulations!</p>
+<p>For the source see;</p>
+<p><a href="git://github.com/nfisher/Sinatra-Skeleton.git">git://github.com/nfisher/Sinatra-Skeleton.git</a></p>
+   </div>
+
+   <div class="column span-5 append-2 last">
+      <div class="box">
+      <h4>About JunctionBox.ca</h4>
+      <p><a href="http://junctionbox.ca/">JunctionBox.ca</a> is the online blog of Nathan Fisher.  I'm a computer geek who loves the outdoors.  During the week you'll find me bridging the gap between developers and operations as a <a href="http://en.wikipedia.org/wiki/DevOps">DevOp</a> at ThoughtWorks, in London.</p>
+      </div>
+
+			<h5>Recent Articles</h5>
+			<ul>
+
+<li><a href="/articles/2008/09/04/ruby-be-nimble--ruby-be-swf---.html">Ruby be nimble, Ruby be SWF...</a></li>
+
+
+<li><a href="/articles/2008/08/26/watch-for-flying-bitmaps.html">Watch for Flying Bitmaps</a></li>
+
+
+<li><a href="/articles/2008/07/25/beware-the-garbage-man-s-scope.html">Beware the Garbage Man's Scope</a></li>
+
+
+<li><a href="/articles/2008/07/04/regular-expression---parsed-elation.html">Regular Expression & Parsed Elation</a></li>
+
+
+<li><a href="/articles/2008/06/26/scrollpane-woes-to-fix-the-flow.html">Scrollpane Woes to Fix the Flow</a></li>
+
+
+<li><a href="/articles/2008/06/26/subversive-lyrics-with-subversion.html">Subversive Lyrics with Subversion</a></li>
+
+
+<li><a href="/articles/2006/04/17/rsync-daily-snapshots.html">Rsync Daily Snapshots</a></li>
+
+			</ul>
+			
+
+      <h5>Blog Roll</h5>
+			<ul>
+			<li><a href="http://dailyinteractive.ca/">DailyInteractive.ca</a></li>
+			<li><a href="http://migz.ca/">Migz.ca</a></li>
+			<li><a href="http://etlgfx.com/">ETL gfx</a></li>
+			<li><a href="http://littlekitchen.ca/">Little Kitchen</a></li>
+			<li><a href="http://matthewkantor.com/">Matthew Kantor</a></li>
+			<li><a href="http://continuousdelivery.com/">Continous Delivery - Jez Humble</a></li>
+			<li><a href="http://www.samnewman.org/">Sam Newman</a></li>
+			</ul>
+   </div>
+
+   <div class="column span-20 prepend-2 append-2 first last" id="footer">
+     <hr />
+     <p><a href="/articles/">Articles</a> | <a href="/resources/">Resources</a> | <a href="/nathan-fisher.html">Contact</a> | All content written by Nathan Fisher unless otherwise noted.</p>
+   </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,163 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+   <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+   <title>Subversive Lyrics with Subversion</title>
+   <meta name="author" content="" />
+
+   <!--- Blueprint CSS Framework -->
+   <link rel="stylesheet" href="/css/blueprint/screen.css" type="text/css" media="screen, projection">
+   <link rel="stylesheet" href="/css/blueprint/print.css" type="text/css" media="print">
+   <!--[if IE]>
+      <link rel="stylesheet" href="/css/blueprint/ie.css" type="text/css" media="screen, projection">
+   <![endif]-->
+
+   <!-- CodeRay syntax highlighting CSS -->
+   <link rel="stylesheet" href="/css/coderay.css" type="text/css" />
+
+   <!-- Homepage CSS -->
+   <link rel="stylesheet" href="/css/site.css" type="text/css" media="screen, projection" />
+</head>
+<body>
+
+<div class="container">
+
+   <div class="column span-20 prepend-2 append-2 first last" id="header">
+     <p class="title"><a href="/">JunctionBox.ca</a></p>
+     <p><a href="/articles/">Articles</a> | <a href="/resources/">Resources</a> | <a href="/nathan-fisher.html">Contact</a></p>
+     <hr/>
+   </div>
+
+   <div class="column span-15 prepend-2 first">
+      <p>The plan for today is to build an automated test environment (static websites only) that updates with each commit. Now I should forewarn you if you play this article backwards the devil will steal your dog, and wife, and leave you with nothing more than a crappy country song. Should that or anything else bad happen be an adult and take responsibility for your own actions, aka I&#8217;m not liable.  Also if you don&#8217;t know what subversion is this article is not a good place to start.\nh3. Ingredients</p>
+<ul>
+	<li>Wildcard DNS</li>
+	<li>Apache 2.2</li>
+	<li>Subversion 1.4.x (SVN)</li>
+	<li>Your favourite scripting language</li>
+	<li>Back-ups, back-ups, back-ups!!!!!</li>
+	<li>Couple of hours</li>
+</ul>
+<p>Okay so how is all of this going to look? Well lets say you have a client named Example and their website is located at example.com.  The goal is to achieve a test site located at http://example.com.projects.myhost.ca/, it&#8217;s a doozy to type, but it&#8217;ll create consistency. Besides the amount of time spent typing will be more than offset by the time it saves you once configured properly.</p>
+<h3>Initial Imports Insulate Against Insolence</h3>
+<p>Okay so lets say you&#8217;ve used svnadmin and created a webdav accessible repository at http://myhost.ca/svn/example.com/, how should the initial import look?</p>
+<ul>
+	<li>branches</li>
+	<li>tags</li>
+	<li>trunk
+	<ul>
+		<li>site</li>
+		<li>src</li>
+	</ul></li>
+</ul>
+<p>As you&#8217;ll note it&#8217;s a pretty vanilla setup for subversion.  So moving forward we&#8217;ll assume that trunk/site contains the latest and greatest of your clients website and trunk src is a dumping ground for your Illustrator, Photoshop, Actionscript and FLA&#8217;s, etc.</p>
+<h3>We Hosts Da Vhosts</h3>
+<p>So what&#8217;s next? Lets get ready to rumble cuz we&#8217;re going to create our vhost configuration. Pick your poison, but you can either append the following setup to your httpd.conf or add a new file named vhosts.conf in your conf.d folder.</p>
+<pre>
+LogFormat "%V %h %l %u %t \"%r\" %s %b" vcommon
+
+&lt;Directory /var/www/vhosts/project&gt;
+# adjust override as you see fit
+AllowOverride All
+&lt;/Directory&gt;
+
+&lt;virtualhost *:80&gt;
+ServerName *.projects.myhost.ca
+
+VirtualDocumentRoot /var/www/vhosts/projects/%-4+
+
+ErrorLog logs/projects.myhost.ca-error_log
+CustomLog logs/projects.myhost.ca-access_log vcommon
+&lt;/virtualhost&gt;
+</pre>
+<h3>Sweet Script O&#8217;Mine</h3>
+<p>Where do we go now&#8230; GNR flashback&#8230; I think not! So we&#8217;ve got a repository and vhost now what? You&#8217;ve got 2 options here;<br />
+write a script that updates an existing checkout.<br />
+write a script that creates a checkout if it does not exist or updates if it does.<br />
+Option 1 is what I&#8217;ve gone with as I&#8217;ve placed the checkout in a script for the creation of my repository. The benefit to Option 2 is that it ensures you&#8217;re checkout environment will have the right permissions for svn updates.</p>
+<p>My script looks a little like the following;</p>
+<pre>
+#!/usr/bin/ruby -w
+#
+# update.rb: Takes a repository URI as a single argument and uses the 
+#    last directory in the URI as part of the update path.
+#
+
+if ARGV.length != 1
+ puts "You must specify a repository!"
+end
+
+# this folder must be owned by your webservers uid if you go with option 2
+PROJECTS_PATH='/var/www/vhosts/projects/'
+
+begin
+ site_name = ARGV[0].split( /\// );
+ site_name = site_name[site_name.length - 1]
+ 
+ `svn update #{PROJECTS_PATH + site_name}`
+rescue
+ # pick a error notification method log it, email it wuteva you want
+end
+</pre>
+<p>Now add this to the end of your post-commit hook as follows;</p>
+<p><code>/somepath/update.rb "$REPOS"</code></p>
+<p>Everytime you commit, it will automatically update a test copy of the site located at;</p>
+<p><code>http://example.com.projects.myhost.ca/</code></p>
+<h3>Conclusion</h3>
+<p>This is a simple way to give the whole family access to test websites without the clutter and extra time of using FTP.</p>
+   </div>
+
+   <div class="column span-5 append-2 last">
+      <div class="box">
+      <h4>About JunctionBox.ca</h4>
+      <p><a href="http://junctionbox.ca/">JunctionBox.ca</a> is the online blog of Nathan Fisher.  I'm a computer geek who loves the outdoors.  During the week you'll find me bridging the gap between developers and operations as a <a href="http://en.wikipedia.org/wiki/DevOps">DevOp</a> at ThoughtWorks, in London.</p>
+      </div>
+
+			<h5>Recent Articles</h5>
+			<ul>
+
+<li><a href="/articles/2008/09/04/ruby-be-nimble--ruby-be-swf---.html">Ruby be nimble, Ruby be SWF...</a></li>
+
+
+<li><a href="/articles/2008/08/26/watch-for-flying-bitmaps.html">Watch for Flying Bitmaps</a></li>
+
+
+<li><a href="/articles/2008/07/25/beware-the-garbage-man-s-scope.html">Beware the Garbage Man's Scope</a></li>
+
+
+<li><a href="/articles/2008/07/04/regular-expression---parsed-elation.html">Regular Expression & Parsed Elation</a></li>
+
+
+<li><a href="/articles/2008/06/26/scrollpane-woes-to-fix-the-flow.html">Scrollpane Woes to Fix the Flow</a></li>
+
+
+<li><a href="/articles/2008/06/26/subversive-lyrics-with-subversion.html">Subversive Lyrics with Subversion</a></li>
+
+
+<li><a href="/articles/2006/04/17/rsync-daily-snapshots.html">Rsync Daily Snapshots</a></li>
+
+			</ul>
+			
+
+      <h5>Blog Roll</h5>
+			<ul>
+			<li><a href="http://dailyinteractive.ca/">DailyInteractive.ca</a></li>
+			<li><a href="http://migz.ca/">Migz.ca</a></li>
+			<li><a href="http://etlgfx.com/">ETL gfx</a></li>
+			<li><a href="http://littlekitchen.ca/">Little Kitchen</a></li>
+			<li><a href="http://matthewkantor.com/">Matthew Kantor</a></li>
+			<li><a href="http://continuousdelivery.com/">Continous Delivery - Jez Humble</a></li>
+			<li><a href="http://www.samnewman.org/">Sam Newman</a></li>
+			</ul>
+   </div>
+
+   <div class="column span-20 prepend-2 append-2 first last" id="footer">
+     <hr />
+     <p><a href="/articles/">Articles</a> | <a href="/resources/">Resources</a> | <a href="/nathan-fisher.html">Contact</a> | All content written by Nathan Fisher unless otherwise noted.</p>
+   </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,208 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+   <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+   <title>Watch for Flying Bitmaps</title>
+   <meta name="author" content="" />
+
+   <!--- Blueprint CSS Framework -->
+   <link rel="stylesheet" href="/css/blueprint/screen.css" type="text/css" media="screen, projection">
+   <link rel="stylesheet" href="/css/blueprint/print.css" type="text/css" media="print">
+   <!--[if IE]>
+      <link rel="stylesheet" href="/css/blueprint/ie.css" type="text/css" media="screen, projection">
+   <![endif]-->
+
+   <!-- CodeRay syntax highlighting CSS -->
+   <link rel="stylesheet" href="/css/coderay.css" type="text/css" />
+
+   <!-- Homepage CSS -->
+   <link rel="stylesheet" href="/css/site.css" type="text/css" media="screen, projection" />
+</head>
+<body>
+
+<div class="container">
+
+   <div class="column span-20 prepend-2 append-2 first last" id="header">
+     <p class="title"><a href="/">JunctionBox.ca</a></p>
+     <p><a href="/articles/">Articles</a> | <a href="/resources/">Resources</a> | <a href="/nathan-fisher.html">Contact</a></p>
+     <hr/>
+   </div>
+
+   <div class="column span-15 prepend-2 first">
+      <p>Zee goal for today is to use ActionScript 3&#8217;s BitmapData to slice and dice a bitmap like a fine piece of sashimi.  A few applications include;</p>
+<ul>
+	<li>client-side image croppers.</li>
+	<li>runtime cropping of linked and external photos for panel backgrounds.</li>
+</ul>
+<p>What I will illustrate here is just a simple sliding door effect.  As seen in the SWF below. The items of greatest interest today include;</p>
+<ul>
+	<li>flash.display.Bitmap</li>
+	<li>flash.display.BitmapData</li>
+	<li>flash.geom.Point</li>
+	<li>flash.geom.Rectangle\nOtay so lets layout what we need and what we generally want to do.</li>
+</ul>
+<h3>Halves Too #Include</h3>
+<ul>
+	<li>JPG or PNG that we want to slice up.</li>
+	<li>Flash compiler (Flex SDK/Flash 9/etc).</li>
+</ul>
+<h3>Blueprints, get your blueprints here!!</h3>
+<p>We are planning a sliding door effect that does not use a mask, where do we start? Well like all things even vaguely cool we require a little math. First lets create an additional 99 frames on our root timeline. Next drag your photo into the Library and create a linkage with a class name of <strong>TestPhoto</strong>. Done? Good now that we&#8217;ve made some room and set the table lets eat!</p>
+<h3>What size slice of pizza would you like with your BitmapData?</h3>
+<p>For this test I decided the number of frames works well to decide my slice size. Each frame is equal to a 1% increment reveal of the bitmap because of those extra 99 frames we added earlier.</p>
+<p><code>var percentage:int = currentFrame / totalFrames;</code></p>
+<h3>I&#8217;m full what next?</h3>
+<p>Remember those extra 99 frames I asked you to add? Well they come in handy when used in conjunction with a frame listener. Below you will find only what is required for the dynamic slice using the current frame to calculate the percentage of image to reveal.</p>
+<pre>
+var slice_width:int = percentage * bitmap_width; 
+var slice_data:BitmapData = new BitmapData( slice_width, source_bitmap.height );
+
+// left edge is stationary
+var crop_region:Rectangle = new Rectangle( 0, 0, slide_width, source_bitmap.height );
+var destination_point:Point = new Point( 0, 0 );
+
+// here's where the magic happens
+slice_data.copyPixels( source_bitmap, crop_region, destination_point );
+var slice_bitmap:Bitmap = new Bitmap( slice_data );
+
+addChild( slice_bitmap );
+</pre>
+<h3>Would you like a mint sir?</h3>
+<p>Okay at some point you&#8217;re going to be full to the brim, or at least providing a full reveal of your image. What if you want to downsize? As <a href="http://www.johnralstonsaul.com/SUM_Unconscious.html">Mr. Saul</a> might argue, downsizing often has a detrimental effect. While I agree, I&#8217;m not here to argue corporate politics. The best way to deal with this conundrum is to clean up after yourself.</p>
+<p><code>if( numChildren &gt; 1 ) removeChildAt( 0 );</code></p>
+<h3>Cheque please!</h3>
+<p>Lets wrap this all up in a class for take-out.</p>
+<pre>
+/**
+ * Written by: Nathan Fisher
+ * License: Do with this what you want just don't blame me if it blows up. 
+ * 
+ * For the simple test use this as your root document class.
+ */
+package {
+ // photo linkage class name
+ import SourceBitmap;
+
+ import flash.display.Bitmap;
+ import flash.display.BitmapData;
+ import flash.display.MovieClip;
+ import flash.display.Sprite;
+
+ import flash.events.Event;
+
+ import flash.geom.Point;
+ import flash.geom.Rectangle;
+
+ public class SlidingDoor extends MovieClip {
+  public static const PHOTO_WIDTH:int = 720;
+  public static const PHOTO_HEIGHT:int = 478;
+  public static const DESTINATION_POINT:Point = new Point( 0, 0 );
+
+  private var source_data:BitmapData;
+  private var slice_container:Sprite;
+  private var bitmap_width:int;
+
+
+  /** SlidingDoor: Constructs a sliding door effect using the specified BitmapData.
+   *
+   */
+  public function SlidingDoor( theSourceData:BitmapData = null )
+  {
+   if( theSourceData == null ) theSourceData = new TestPhoto( PHOTO_WIDTH, PHOTO_HEIGHT );
+   source_data = theSourceData;
+   bitmap_width = theSourceData.width;
+
+   slice_container = new Sprite( );
+   addChild( slice_container );
+   addEventListener( Event.ENTER_FRAME, frameListener );
+  }
+
+
+  /** frameListener: Each passing frame represents a percentage of the photo to reveal.
+   *
+   */
+  public function frameListener( e:Event ):void
+  {
+   var slice_width:int = percentage * bitmap_width; 
+   var slice_data:BitmapData = new BitmapData( slice_width, source_bitmap.height );
+
+   // left edge is stationary
+   var crop_region:Rectangle = new Rectangle( 0, 0, slide_width, source_bitmap.height );
+   var destination_point:Point = new Point( 0, 0 );
+
+   // here's where the magic happens
+   slice_data.copyPixels( source_bitmap, crop_region, destination_point );
+   var slice_bitmap:Bitmap = new Bitmap( slice_data );
+
+   // what good is art if no one see's it? Add to the slice_container so it is visible.
+   slice_container.addChild( slice_bitmap );
+   // remove previous slices if applicable.
+   if( slice_container.numChildren &gt; 1 ) slice_container.removeChildAt( 0 );
+  }
+ }
+}
+</pre>
+<p>In the example above I assumed the bitmap slice is the only element in it&#8217;s parent container. As illustrated in the full class definition I suggest creating an empty MovieClip or Sprite that is reserved for such a purpose.</p>
+<h3>Flash to 2 minutes later in the lavatory&#8230; OUTPUT!</h3>
+<p><object type="application/x-shockwave-flash" data="/images/phototest.swf" width="550" height="400"><br />
+<param name="movie" value="/images/phototest.swf" /><br />
+</object></p>
+<h3>Notes &amp; Other Weirdness</h3>
+<p>The class can be refined much further including a setter for the bitmap data. Like all things in life there is always room for improvement.</p>
+<p>The included photo was provided by <a href="http://www.tessierpools.com/">Tessier Pools</a> and is a <a href="http://www.questarpools.com/">Skip Phillips</a> design.</p>
+   </div>
+
+   <div class="column span-5 append-2 last">
+      <div class="box">
+      <h4>About JunctionBox.ca</h4>
+      <p><a href="http://junctionbox.ca/">JunctionBox.ca</a> is the online blog of Nathan Fisher.  I'm a computer geek who loves the outdoors.  During the week you'll find me bridging the gap between developers and operations as a <a href="http://en.wikipedia.org/wiki/DevOps">DevOp</a> at ThoughtWorks, in London.</p>
+      </div>
+
+			<h5>Recent Articles</h5>
+			<ul>
+
+<li><a href="/articles/2008/09/04/ruby-be-nimble--ruby-be-swf---.html">Ruby be nimble, Ruby be SWF...</a></li>
+
+
+<li><a href="/articles/2008/08/26/watch-for-flying-bitmaps.html">Watch for Flying Bitmaps</a></li>
+
+
+<li><a href="/articles/2008/07/25/beware-the-garbage-man-s-scope.html">Beware the Garbage Man's Scope</a></li>
+
+
+<li><a href="/articles/2008/07/04/regular-expression---parsed-elation.html">Regular Expression & Parsed Elation</a></li>
+
+
+<li><a href="/articles/2008/06/26/scrollpane-woes-to-fix-the-flow.html">Scrollpane Woes to Fix the Flow</a></li>
+
+
+<li><a href="/articles/2008/06/26/subversive-lyrics-with-subversion.html">Subversive Lyrics with Subversion</a></li>
+
+
+<li><a href="/articles/2006/04/17/rsync-daily-snapshots.html">Rsync Daily Snapshots</a></li>
+
+			</ul>
+			
+
+      <h5>Blog Roll</h5>
+			<ul>
+			<li><a href="http://dailyinteractive.ca/">DailyInteractive.ca</a></li>
+			<li><a href="http://migz.ca/">Migz.ca</a></li>
+			<li><a href="http://etlgfx.com/">ETL gfx</a></li>
+			<li><a href="http://littlekitchen.ca/">Little Kitchen</a></li>
+			<li><a href="http://matthewkantor.com/">Matthew Kantor</a></li>
+			<li><a href="http://continuousdelivery.com/">Continous Delivery - Jez Humble</a></li>
+			<li><a href="http://www.samnewman.org/">Sam Newman</a></li>
+			</ul>
+   </div>
+
+   <div class="column span-20 prepend-2 append-2 first last" id="footer">
+     <hr />
+     <p><a href="/articles/">Articles</a> | <a href="/resources/">Resources</a> | <a href="/nathan-fisher.html">Contact</a> | All content written by Nathan Fisher unless otherwise noted.</p>
+   </div>
+
+</div>
+</body>
+</html>
