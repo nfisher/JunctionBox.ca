@@ -1,0 +1,14 @@
+---
+title:      .NET
+created_at: 2011-04-01 02:58:03.403858 +00:00
+filter:
+  - erb
+  - textile
+---
+p(title). <%= h(@page.title) %>
+
+h4. SDK's
+
+".NET 4.0 SDK":http://www.microsoft.com/downloads/en/details.aspx?familyid=35AEDA01-421D-4BA5-B44B-543DC8C33A20&displaylang=en
+
+".NET 4.0 Framework":http://www.microsoft.com/downloads/en/details.aspx?FamilyID=0A391ABD-25C1-4FC0-919F-B21F31AB88B7
