@@ -8,7 +8,7 @@ filter:    erb
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
 <head>
    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-   <title><%= @page.title %></title>
+   <title><%= @page.title %> - JunctionBox.ca</title>
    <meta name="author" content="<%= @page.author %>" />
 
    <!--- Blueprint CSS Framework -->
@@ -57,15 +57,16 @@ filter:    erb
 
 			<h5>Recent Articles</h5>
 			<ul>
-<% @pages.find(:limit => 7, :in_directory => 'articles', :sort_by => 'created_at', :recursive => true, :reverse => true).each do |page| -%>
+		<% @pages.find(:limit => 7, :in_directory => 'articles', :sort_by => 'created_at', :recursive => true, :reverse => true).each do |page| -%>
 
-<% unless page.url == '/articles/' -%>
-<li><a href="<%= page.url %>?ref=recent"><%= page.title %></a></li>
-<% end -%>
+		<% unless page.url == '/articles/' -%>
+		<li><a href="<%= page.url %>?ref=recent"><%= page.title %></a></li>
+		<% end -%>
 
-<% end -%>
+		<% end -%>
+
 			</ul>
-			
+			<p><a href="/articles/?ref=recent">More Articles</a></p>		
 
       <h5>Blog Roll</h5>
 			<ul>

@@ -31,4 +31,4 @@ debug :debug do |t|
 end
 </pre>
 
-\n
+<div id="disqus_thread"></div>

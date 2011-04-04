@@ -81,3 +81,5 @@ The F3MaskPane must not extend the Object class because of what appears to be a 
 There is currently no upper limit on the number of iterations that checkPane will be called.
 Audio maybe a problem because of the refreshPane.
 That’s all for now.
+
+<div id="disqus_thread"></div>

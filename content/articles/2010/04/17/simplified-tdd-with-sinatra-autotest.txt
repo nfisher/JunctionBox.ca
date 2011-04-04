@@ -145,3 +145,5 @@ And there we go our first of hopefully many tests is now passing, congratulation
 For the source see;
 
 "git://github.com/nfisher/Sinatra-Skeleton.git":git://github.com/nfisher/Sinatra-Skeleton.git
+
+<div id="disqus_thread"></div>

@@ -40,3 +40,5 @@ FROM page_views GROUP BY name
 </pre>
 
 What are your thoughts? Any similar implementations how did you handle it?
+
+<div id="disqus_thread"></div>

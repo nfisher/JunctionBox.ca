@@ -51,3 +51,5 @@ end
 </pre>
 
 And voila, you should have all your bytes in a nice little (big) string. All you have left is to run through each byte and decode to your hearts content.
+
+<div id="disqus_thread"></div>

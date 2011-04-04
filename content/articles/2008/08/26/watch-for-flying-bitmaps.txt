@@ -146,3 +146,5 @@ h3. Notes & Other Weirdness
 The class can be refined much further including a setter for the bitmap data. Like all things in life there is always room for improvement.
 
 The included photo was provided by "Tessier Pools":http://www.tessierpools.com/ and is a "Skip Phillips":http://www.questarpools.com/ design.
+
+<div id="disqus_thread"></div>

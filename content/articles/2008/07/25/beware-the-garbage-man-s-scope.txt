@@ -24,3 +24,5 @@ public function rotatePage( dest ):void {
  _rotation_tween = new Tween( pages, "rotation", Elastic.easeOut, src, dest, duration, true );
 }
 </pre>
+
+<div id="disqus_thread"></div>

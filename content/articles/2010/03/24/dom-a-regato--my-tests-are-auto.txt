@@ -23,3 +23,5 @@ So a quick rundown of my setup.
 ** autotest-growl
 ** autotest-rails-pure
 ** test-unit
+
+<div id="disqus_thread"></div>

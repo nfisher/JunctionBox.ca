@@ -125,3 +125,5 @@ During Phase 1 no objects are actually built.  Instead evaluate the object reque
 Phase 2 is executed as soon as each objects dependencies are fulfilled. If an object has all of its dependencies fulfilled immediately then it is instantiated, otherwise it sits on the back burner waiting for it's time.
 
 I have a direction, stay tuned for the final product!
+
+<div id="disqus_thread"></div>
