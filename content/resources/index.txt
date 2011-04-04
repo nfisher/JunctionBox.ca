@@ -12,7 +12,7 @@ p(title). <%= h(@page.title) %>
 
 <% unless page.url == '/resources/' -%>
 
-"<%= page.title %>":<%= page.url %>
+"<%= page.title %>":<%= page.url %>?ref=resources
 
 <% end -%>
 <% end -%>

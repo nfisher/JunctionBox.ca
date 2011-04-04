@@ -7,7 +7,7 @@ filter:
 ---
 <p class="title"><%= h(@page.title) %></a></p>
 
-<% @pages.find(:limit => 15, :in_directory => 'articles', :sort_by => 'created_at', :reverse => true, :recursive => true).each do |page| -%>
+<% @pages.find(:limit => :all, :in_directory => 'articles', :sort_by => 'created_at', :reverse => true, :recursive => true).each do |page| -%>
 
 <% unless page.url == '/articles/' %>
 <p><a href="<%= page.url %>"><%= page.title %></a><br/>
