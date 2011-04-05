@@ -42,7 +42,8 @@
    </div>
 
    <div class="column span-17 first">
-      <p>Started getting back into CodeIgnitor, but the one thing I was really missing from Rails is a test framework.  As much as it doesn&#8217;t seem to have the same ongoing support and uptake as PHPUnit, I have a certain affinity to the SimpleTest framework.  I decided to see what ramblings there were regarding TDD and CodeIgnitor on the interweb. In my search I ran across the article <a href="http://jamierumbelow.net/2009/08/11/setting-up-the-perfect-codeigniter-tdd-environment/">Setting up the perfect CodeIgniter &amp; TDD Environment</a>.  I downloaded the code and massaged it a little to suit my needs.  I&#8217;m not fully content with the implementation of BaseTestPath, but I&#8217;m sure a round of TDD (which I should&#8217;ve started with) will probably iron it out.  Kudos to Jamie for doing the heavy lifting!\nIt hasn&#8217;t been thoroughly tested, so use at your own peril. Specifically I haven&#8217;t verified the views section, but upon initial inspection unit tests work.  I&#8217;m thinking generate and destroy functions that build out the skelton for models, controllers, views might be my next step.</p>
+      <h2>Approaching bliss; TDD+PHP+MVC</h2>
+<p>Started getting back into CodeIgnitor, but the one thing I was really missing from Rails is a test framework.  As much as it doesn&#8217;t seem to have the same ongoing support and uptake as PHPUnit, I have a certain affinity to the SimpleTest framework.  I decided to see what ramblings there were regarding TDD and CodeIgnitor on the interweb. In my search I ran across the article <a href="http://jamierumbelow.net/2009/08/11/setting-up-the-perfect-codeigniter-tdd-environment/">Setting up the perfect CodeIgniter &amp; TDD Environment</a>.  I downloaded the code and massaged it a little to suit my needs.  I&#8217;m not fully content with the implementation of BaseTestPath, but I&#8217;m sure a round of TDD (which I should&#8217;ve started with) will probably iron it out.  Kudos to Jamie for doing the heavy lifting!\nIt hasn&#8217;t been thoroughly tested, so use at your own peril. Specifically I haven&#8217;t verified the views section, but upon initial inspection unit tests work.  I&#8217;m thinking generate and destroy functions that build out the skelton for models, controllers, views might be my next step.</p>
 <pre>
 &lt;?php
 /*
@@ -272,10 +273,13 @@ $test_suite-&gt;run(new HtmlReporter());
 /* Location: ./test.php */
 </pre>
 <div id="disqus_thread"></div>
+<p class="quiet">Posted on December 12, 2009, by Nathan Fisher</p>
+
    </div>
 
    <div class="column span-6 prepend-1 last">
       <div class="box">
+			<img src="http://www.myopenid.com/image?id=142724"/>
       <h4>About JunctionBox.ca</h4>
       <p><a href="http://junctionbox.ca/?ref=about">JunctionBox.ca</a> is the online blog of Nathan Fisher.  I'm a computer geek who loves the outdoors.  During the week you'll find me bridging the gap between developers and operations as a <a href="http://en.wikipedia.org/wiki/DevOps">DevOp</a> at ThoughtWorks, in London.</p>
       </div>

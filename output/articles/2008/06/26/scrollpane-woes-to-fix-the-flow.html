@@ -42,7 +42,8 @@
    </div>
 
    <div class="column span-17 first">
-      <p>Using the V2 ScrollPane component, externally loaded SWF’s may visually overflow outside of the defined ScrollPane area. Quite often the scrolling will still work, however the masking does not do its job as expected. In trying to solve the problem we have used everything from overloading the Loader class methods to simply calling invalidate briefly after the data loads.\nh3. Coming to an understanding is part of the problem.</p>
+      <h2>Scrollpane Woes to Fix the Flow</h2>
+<p>Using the V2 ScrollPane component, externally loaded SWF’s may visually overflow outside of the defined ScrollPane area. Quite often the scrolling will still work, however the masking does not do its job as expected. In trying to solve the problem we have used everything from overloading the Loader class methods to simply calling invalidate briefly after the data loads.\nh3. Coming to an understanding is part of the problem.</p>
 <p>To fully understand the problem you need to go into the interaction between the Flash player, V2 components, and MovieClips. First off you will rarely, if ever, experience this problem in the Flash Developer environment. Why? The problem appears to be timing, and local files generally have no measurable load time relative to their web based counterparts. In your browser once the SWF has been cached the next refresh of the page generally works fine. Wipe your cache and watch the problem return.</p>
 <h3>Where does the MovieClip class fit in?</h3>
 <p>MovieClip objects wipe their event handlers with a loadMovie, except the onClipEvent(), and variations of on(). For dynamically created clips it means you need to monitor the MovieClip outside of the MovieClip’s instance. On moderate to slow connections the ScrollPane seems to report a SWF file being loaded before it is actually complete, most likely because of the way it monitors the loading process.</p>
@@ -107,10 +108,13 @@ There is currently no upper limit on the number of iterations that checkPane wil
 Audio maybe a problem because of the refreshPane.<br />
 That’s all for now.</p>
 <div id="disqus_thread"></div>
+<p class="quiet">Posted on June 26, 2008, by Nathan Fisher</p>
+
    </div>
 
    <div class="column span-6 prepend-1 last">
       <div class="box">
+			<img src="http://www.myopenid.com/image?id=142724"/>
       <h4>About JunctionBox.ca</h4>
       <p><a href="http://junctionbox.ca/?ref=about">JunctionBox.ca</a> is the online blog of Nathan Fisher.  I'm a computer geek who loves the outdoors.  During the week you'll find me bridging the gap between developers and operations as a <a href="http://en.wikipedia.org/wiki/DevOps">DevOp</a> at ThoughtWorks, in London.</p>
       </div>
