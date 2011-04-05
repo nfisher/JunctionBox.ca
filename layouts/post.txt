@@ -1,0 +1,10 @@
+---
+extension: html
+filter:    erb
+layout:    default
+---
+<h2><%= @page.title %></h2>
+<%= @content %>
+<p class="quiet">Posted on <%= @page.created_at.strftime('%B %d, %Y') %>, by Nathan Fisher</p>
+
+<div id="disqus_thread"></div>

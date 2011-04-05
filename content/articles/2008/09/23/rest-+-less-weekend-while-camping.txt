@@ -49,4 +49,3 @@ Now I want to take the previous table a little bit further to map out each of th
 | . | * | 410 - Gone | READ FAILED => ?? | Event no longer available/never existed. |
 | . | PUT | 200 - OK | UPDATE => Show Event w/ Updates | Event updated, SHOW updated event |
 
-<div id="disqus_thread"></div>

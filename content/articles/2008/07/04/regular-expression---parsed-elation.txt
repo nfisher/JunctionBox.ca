@@ -10,4 +10,3 @@ Here's a little app I wrote during a project to test ActionScript 3's regular ex
 <param name="movie" value="/images/as3regex.swf" />
 </object>
 
-<div id="disqus_thread"></div>

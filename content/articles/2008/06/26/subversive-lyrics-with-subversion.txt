@@ -96,4 +96,3 @@ h3. Conclusion
 
 This is a simple way to give the whole family access to test websites without the clutter and extra time of using FTP.
 
-<div id="disqus_thread"></div>

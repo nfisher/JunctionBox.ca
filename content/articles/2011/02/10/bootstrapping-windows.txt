@@ -57,4 +57,3 @@ Function download_file(src, dest)
 End Function
 </pre>
 
-<div id="disqus_thread"></div>

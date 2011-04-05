@@ -51,4 +51,3 @@ h4. Server
 puppetca --clean CERT_ID
 </pre>
 
-<div id="disqus_thread"></div>

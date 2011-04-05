@@ -64,4 +64,3 @@ function projectLink( $id, $label ) {
 init();
 </pre>
 
-<div id="disqus_thread"></div>

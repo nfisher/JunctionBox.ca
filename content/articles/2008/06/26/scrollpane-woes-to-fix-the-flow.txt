@@ -83,4 +83,3 @@ There is currently no upper limit on the number of iterations that checkPane wil
 Audio maybe a problem because of the refreshPane.
 That’s all for now.
 
-<div id="disqus_thread"></div>

@@ -237,4 +237,3 @@ $test_suite->run(new HtmlReporter());
 /* Location: ./test.php */
 </pre>
 
-<div id="disqus_thread"></div>

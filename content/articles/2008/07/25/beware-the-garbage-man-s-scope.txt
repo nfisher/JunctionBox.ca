@@ -26,4 +26,3 @@ public function rotatePage( dest ):void {
 }
 </pre>
 
-<div id="disqus_thread"></div>

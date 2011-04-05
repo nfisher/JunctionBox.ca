@@ -22,5 +22,3 @@ done
 mkdir $BASE/$DATEDIR
 cp -Rl $BASE/$CUR/* $BASE/$DATEDIR/
 </pre>
-
-<div id="disqus_thread"></div>

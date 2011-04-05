@@ -32,4 +32,3 @@ debug :debug do |t|
 end
 </pre>
 
-<div id="disqus_thread"></div>

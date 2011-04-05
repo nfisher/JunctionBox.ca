@@ -147,4 +147,3 @@ For the source see;
 
 "git://github.com/nfisher/Sinatra-Skeleton.git":git://github.com/nfisher/Sinatra-Skeleton.git
 
-<div id="disqus_thread"></div>

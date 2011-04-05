@@ -127,4 +127,3 @@ Phase 2 is executed as soon as each objects dependencies are fulfilled. If an ob
 
 I have a direction, stay tuned for the final product!
 
-<div id="disqus_thread"></div>
