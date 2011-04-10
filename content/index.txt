@@ -16,7 +16,7 @@ filter:
 <% unless page.url == '/articles/' %>
 <h2><%= page.title %></h2>
 <%= render(page) %>
-<p><a href="<%= page.url %>?ref=home#disqus_thread">Comments</a></p>
+<p><a href="<%= page.url %>?ref=home#disqus_thread" data-disqus-identifier="<%= page.url %>">Comments</a></p>
 <hr/>
 <% end -%>
 
