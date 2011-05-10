@@ -18,6 +18,10 @@ h4. SDK's
 
 ".NET 4.0 Framework":http://www.microsoft.com/downloads/en/details.aspx?FamilyID=0A391ABD-25C1-4FC0-919F-B21F31AB88B7
 
+h4. Profiling
+
+"Entity Framework Profiler":http://efprof.com/
+
 h4. Deployment
 
 "Web Deploy":http://technet.microsoft.com/en-us/library/dd569059(WS.10).aspx
