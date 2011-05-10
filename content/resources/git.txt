@@ -38,6 +38,11 @@ git svn fetch
 git rebase trunk
 git svn dcommit
 
+h3. Remote Tracking
+
+pre. git branch rspec
+git branch --track $BRANCH $REMOTE/$BRANCH
+
 h2. Reference Material
 
 "Err the Blog":http://cheat.errtheblog.com/s/git/ - good list of commonly used git commands.
